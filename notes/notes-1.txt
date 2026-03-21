@@ -1,0 +1,3 @@
+goal; prove x or y = not(not(x) and not(y))
+
+not(not(x) and not(y)) = not(not(x) or not(not(y)) =  x or y
