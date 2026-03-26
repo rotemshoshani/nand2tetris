@@ -41,5 +41,37 @@ CHIP ALU {
         ng;      // if (out < 0)  equals 1, else 0
 
     PARTS:
-    //// Replace this comment with your code.
+    // Mux4Way16(a=x, b=notx, c=false, d=true, sel=[1]=zx, sel[0]=nx, out=finalx);
+    // Mux4Way16(a=y, b=noty, c=false, d=true, sel=[1]=zy, sel[0]=ny, out=finaly);
+
+    // calculate final x, y values after zx nx zy ny
+    Mux16(a=x, b=false, sel=zx, out=x1);
+    Not16(in=x1, out=notx1);
+    Mux16(a=x1, b=notx1, sel=nx, out=x2);
+    Mux16(a=y, b=false, sel=zy, out=y1);
+    Not16(in=y1, out=noty1);
+    Mux16(a=y1, b=noty1, sel=ny, out=y2);
+
+    // apply f
+    And16(a=x2, b=y2, out=x2andy2);
+    Add16(a=x2, b=y2, out=x2addy2);
+    Mux16(a=x2andy2, b=x2addy2, sel=f, out=fout);
+
+    // apply no
+    Not16(in=fout, out=notfout);
+    // Mux16(a=fout, b=notfout, sel=no, out=outexpo);
+    // Mux16(a=fout, b=notfout, sel=no, out=out);
+
+    Mux16(a=fout, b=notfout, sel=no, out=out, out[0..7]=low, out[8..15]=high, out[15]=ng);
+
+
+    // set zr
+    Or8Way(in=low, out=lowcheck);
+    Or8Way(in=high, out=highcheck);
+    Or(a=lowcheck, b=highcheck, out=is0);
+    Not(in=is0, out=zr);
+
+    // set ng
+    // Mux16(a=true, b=false, sel=outexpo[15], out=ng);
+    
 }
