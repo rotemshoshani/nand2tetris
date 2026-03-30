@@ -19,8 +19,8 @@ then
 	echo "                                     message is printed to the command console."
 elif [ $# -eq 0 ]
 then
-	# Run hardware simulator in interactive mode
-	java -classpath "${CLASSPATH}:bin/classes:BuiltIn:bin/lib/Hack.jar:bin/lib/HackGUI.jar:bin/lib/Simulators.jar:bin/lib/SimulatorsGUI.jar:bin/lib/Compilers.jar" HardwareSimulatorMain &
+	# Run hardware simulator in interactive mode (with scrollable wrapper)
+	java --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED -classpath "${CLASSPATH}:bin/classes:BuiltIn:bin/lib/Hack.jar:bin/lib/HackGUI.jar:bin/lib/Simulators.jar:bin/lib/SimulatorsGUI.jar:bin/lib/Compilers.jar" ScaledLauncher.java &
 else
 	# Convert arg1 to an absolute path and run hardware simulator with arg1
 	if [ `echo "$1" | sed -e "s/\(.\).*/\1/"` = / ]
@@ -30,5 +30,5 @@ else
 		arg1="${dir}/$1"
 	fi
 #	echo Running "$arg1"
-	java -classpath "${CLASSPATH}:bin/classes:BuiltIn:bin/lib/Hack.jar:bin/lib/HackGUI.jar:bin/lib/Simulators.jar:bin/lib/SimulatorsGUI.jar:bin/lib/Compilers.jar" HardwareSimulatorMain "$arg1"
+	java --add-opens java.desktop/sun.awt.X11=ALL-UNNAMED -classpath "${CLASSPATH}:bin/classes:BuiltIn:bin/lib/Hack.jar:bin/lib/HackGUI.jar:bin/lib/Simulators.jar:bin/lib/SimulatorsGUI.jar:bin/lib/Compilers.jar" ScaledLauncher.java "$arg1"
 fi
